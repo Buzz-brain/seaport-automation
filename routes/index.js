@@ -11,7 +11,7 @@ module.exports = (io) => {
         const containers = await Container.find({
             containerId: { $regex: searchQuery, $options: 'i' }
         });
-        res.render('dashboard', { containers, selectedLocation: null });
+        res.render('index', { containers, selectedLocation: null });
     });
     
 
@@ -55,10 +55,10 @@ module.exports = (io) => {
     router.get('/storage/:location', async (req, res) => {
         const { location } = req.params;
         const containers = await Container.find({ storageLocation: `Storage ${location}` });
-        res.render('dashboard', { containers, selectedLocation: location });
+        res.render('index', { containers, selectedLocation: location });
     });
 
-    router.get('/dashboard/container/:id', async (req, res) => {
+    router.get('/container/:id', async (req, res) => {
         const container = await Container.findOne({ containerId: req.params.id });
         res.render('container-details', { container });
     });
