@@ -6,7 +6,7 @@ module.exports = (io) => {
 
     // Dashboard Route
 
-    router.get('/dashboard', async (req, res) => {
+    router.get('/', async (req, res) => {
         const searchQuery = req.query.search || '';
         const containers = await Container.find({
             containerId: { $regex: searchQuery, $options: 'i' }
@@ -52,7 +52,7 @@ module.exports = (io) => {
     });
 
     // Filter by Storage Location
-    router.get('/dashboard/storage/:location', async (req, res) => {
+    router.get('/storage/:location', async (req, res) => {
         const { location } = req.params;
         const containers = await Container.find({ storageLocation: `Storage ${location}` });
         res.render('dashboard', { containers, selectedLocation: location });
