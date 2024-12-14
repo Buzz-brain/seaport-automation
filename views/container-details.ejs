@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fb;
+            color: #333;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        .container-info {
+            background-color: white;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+        }
+
+        .container-info h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .container-info p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .container-info strong {
+            font-weight: 500;
+        }
+
+        .back-to-dashboard {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            transition: background-color 0.3s;
+        }
+
+        .back-to-dashboard:hover {
+            background-color: #007bff;
+        }
+
+        footer {
+            background-color: #2d3436;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container-info {
+                padding: 20px;
+            }
+
+            .back-to-dashboard {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Container Details</h1>
+    </header>
+
+    <section>
+        <!-- Container Information Display -->
+        <div class="container-info">
+            <h2>Container ID: <%= container.containerId %></h2>
+            <p><strong>Size:</strong> <%= container.size %></p>
+            <p><strong>Storage Condition:</strong> <%= container.storageCondition %></p>
+            <p><strong>Location:</strong> <%= container.location %></p>
+            <p><strong>Contents:</strong> <%= container.contents %></p>
+            <!-- Add more fields as needed -->
+        </div>
+
+        <!-- Back to Dashboard Link with Filters -->
+        <a class="back-to-dashboard" href="/dashboard?search=<%= searchQuery %>&size=<%= sizeFilter %>&storageCondition=<%= storageConditionFilter %>&location=<%= selectedLocation %>">
+            Back to Dashboard
+        </a>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Seaport Tracking. All rights reserved.</p>
+    </footer>
+</body>
+</html>
