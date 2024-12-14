@@ -12,11 +12,12 @@
     </nav>
     
     <h1>Update Container Location</h1>
+    <marquee behavior="" direction="">This simulates the function of the micro-controller with the RFID </marquee>
     <form action="/update-location" method="POST">
         <input type="text" name="containerId" placeholder="Container ID" required>
         <input type="text" name="content" placeholder="Content" required>
-        <input type="text" name="storageCondition" placeholder="Storage Condition e.g hot, cold" required>
-        <input type="text" name="size" placeholder="Size e.g 10 foot, 30 foot" required>
+        <input type="text" name="storageCondition" placeholder="Storage Condition e.g hot, cold, dry" required>
+        <input type="text" name="size" placeholder="Size e.g 10 feet, 30 feet" required>
         <select name="storageLocation" required>
             <option value="Storage A">Storage A</option>
             <option value="Storage B">Storage B</option>
