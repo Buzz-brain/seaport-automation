@@ -29,14 +29,14 @@
 
 
     <nav>
-        <a href="/dashboard" class="<%= !selectedLocation ? 'active' : '' %>">All Containers</a>
-        <a href="/dashboard/storage/A" class="<%= selectedLocation === 'A' ? 'active' : '' %>">Storage A</a>
-        <a href="/dashboard/storage/B" class="<%= selectedLocation === 'B' ? 'active' : '' %>">Storage B</a>
-        <a href="/dashboard/storage/C" class="<%= selectedLocation === 'C' ? 'active' : '' %>">Storage C</a>
+        <a href="/" class="<%= !selectedLocation ? 'active' : '' %>">All Containers</a>
+        <a href="/storage/A" class="<%= selectedLocation === 'A' ? 'active' : '' %>">Storage A</a>
+        <a href="/storage/B" class="<%= selectedLocation === 'B' ? 'active' : '' %>">Storage B</a>
+        <a href="/storage/C" class="<%= selectedLocation === 'C' ? 'active' : '' %>">Storage C</a>
     </nav>
 
 
-    <form method="GET" action="/dashboard">
+    <form method="GET" action="/">
         <input type="text" name="search" placeholder="Search by Container ID" />
         <button type="submit">Search</button>
     </form>
@@ -70,7 +70,7 @@
                         <td>
                             <%= container.storageLocation %>
                         </td>
-                        <!-- <td style="background-color: #007bff; text-align: center; cursor: pointer;"><a style="text-decoration: none; color: white" href="/dashboard/container/<%= container.containerId %>">View Details</a></td> -->
+                        <!-- <td style="background-color: #007bff; text-align: center; cursor: pointer;"><a style="text-decoration: none; color: white" href="/container/<%= container.containerId %>">View Details</a></td> -->
                     </tr>
                     <% }) %>
             </tbody>
