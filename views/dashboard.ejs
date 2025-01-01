@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        /* Body Styling */
+        body {
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #2c3e50;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            height: 25vh;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            padding: 2rem;
+            align-items : center;
+        }
+
+        img {
+            cursor: pointer;
+            border-radius: 10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+
+        }
+
+        /* Widget Styling */
+        .widget {
+            position: relative;
+            width: 400px;
+            height: 350px;
+            /* adjust height as needed */
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .widget::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            border-radius: 8px;
+
+        }
+
+
+        .widget:hover {
+            transform: translateY(-5px);
+            transform: scale(1.1);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .widget h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            position: absolute;
+            color: #fff;
+            z-index: 2;
+            top: 20px;
+            left: 20px;
+            text-shadow: 1px 1px 1px black;
+        }
+
+
+        .widget p {
+            font-size: 1rem;
+            position: absolute;
+            color: #fff;
+            z-index: 2;
+            bottom: 20px;
+            left: 20px;
+            font-size: 18px;
+
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+    
+    <header>
+        <h1>Admin Dashboard</h1>
+        <h2>Seaport Automation</h2>
+        <a href="/"><button
+            style="position:absolute; right: 5%; top: 5%; padding: 15px; border-radius: 5px; outline: none; border: none; font-size: 1rem; cursor: pointer;"
+            onclick="showAddCargoForm()">Back</button></a>
+    </header>
+    <main class="dashboard">
+        <a href="/tracking">
+            <div class="widget" id="cargo-tracking">
+                <img src="cargo-tracking.png" width="300px" alt="">
+                <h2>Cargo Tracking</h2>
+                <p>Track all cargo movements in real-time.</p>
+            </div>
+        </a>
+        <a href="/allocation">
+            <div class="widget" id="storage-allocation">
+                <img src="storage-allocation.jpg" width="300px" alt="">
+                <h2>Storage Allocation</h2>
+                <p>Manage and allocate storage spaces efficiently.</p>
+            </div>
+        </a>
+        <div class="widget" id="surveillance-system" style="background-image: url('survelliance.png');">
+            <h2>Surveillance System</h2>
+            <p>Monitor surveillance systems and ensure security.</p>
+        </div>
+    </main>
+</body>
+
+</html>

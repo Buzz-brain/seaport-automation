@@ -1,0 +1,70 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Seaport Tracking Dashboard</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io(); // Connect to the server
+
+        // Listen for updates
+        socket.on('updateDashboard', () => {
+            location.reload(); // Reload the page when an update is received
+        });
+    </script>
+</head>
+
+<body>
+
+    <header style="margin-bottom: 70px;">
+        <nav>
+            <a href="/update-location">Update Container Location</a>
+        </nav>
+    </header>
+
+    <h1>Seaport Tracking Dashboard</h1>
+
+
+    <nav>
+        <a href="/dashboard" class="<%= !selectedLocation ? 'active' : '' %>">All Containers</a>
+        <a href="/dashboard/storage/A" class="<%= selectedLocation === 'A' ? 'active' : '' %>">Storage A</a>
+        <a href="/dashboard/storage/B" class="<%= selectedLocation === 'B' ? 'active' : '' %>">Storage B</a>
+        <a href="/dashboard/storage/C" class="<%= selectedLocation === 'C' ? 'active' : '' %>">Storage C</a>
+    </nav>
+    
+
+    <form method="GET" action="/dashboard">
+        <input type="text" name="search" placeholder="Search by Container ID" />
+        <button type="submit">Search</button>
+    </form>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Container ID</th>
+                <th>Content</th>
+                <th>Size</th>
+                <th>Storage Condition</th>
+                <th>Storage Location</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% containers.forEach(container => { %>
+                <tr>
+                    <td><%= container.containerId %></td>
+                    <td><%= container.content %></td>
+                    <td><%= container.size %></td>
+                    <td><%= container.storageCondition %></td>
+                    <td><%= container.storageLocation %></td>
+                    <td style="background-color: #007bff; text-align: center; cursor: pointer;"><a style="text-decoration: none; color: white" href="/dashboard/container/<%= container.containerId %>">View Details</a></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+
+</html> -->

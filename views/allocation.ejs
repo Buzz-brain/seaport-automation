@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Allocation</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #4A47A3;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        main {
+            margin: 2rem auto;
+            max-width: 1200px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            background: white;
+            color: #4A47A3;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab.active {
+            background-color: #4A47A3;
+            color: white;
+        }
+
+        .storage-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .storage-info span {
+            font-size: 1rem;
+        }
+
+        .storage-info span strong {
+            color: #4A47A3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4A47A3;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        td {
+            font-size: 0.9rem;
+        }
+
+        .view-button {
+            padding: 0.5rem 1rem;
+            background-color: #4A47A3;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .view-button:hover {
+            background-color: #3B3798;
+        }
+
+        #form-container {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: -100%;
+            /* Initially hide the form off the left */
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            transition: left 0.5s ease-in-out;
+            /* Smooth transition for sliding */
+        }
+
+        #form-container.show {
+            left: 0;
+            /* Slide in the form */
+        }
+
+        button.close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #4A47A3;
+        }
+
+        button.close-btn:hover {
+            color: red;
+        }
+
+        #add-cargo-form {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        input {
+            width: 50px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <header style="display: flex; justify-content: space-around;">
+        <a href="/dashboard"><button
+            style="padding: 15px; border-radius: 5px; outline: none; border: none; font-size: 1rem; cursor: pointer;"
+            onclick="showAddCargoForm()">Back</button></a>
+        <p>Storage Allocation</p>
+
+        <button
+            style="padding: 15px; border-radius: 5px; outline: none; border: none; font-size: 1rem; cursor: pointer;"
+            onclick="showAddCargoForm()">Add Cargo</button>
+    </header>
+
+    <main>
+        <div class="tabs">
+            <div class="tab">Warehouse A</div>
+            <div class="tab active">Warehouse B</div>
+            <div class="tab">Warehouse C</div>
+        </div>
+        <div id="main">
+
+
+
+            <div class="storage-info">
+                <span>Total Storage: <strong>1200</strong></span>
+                <span>Available Storage: <strong style="color: green;">700</strong></span>
+                <span>Room Condition: <strong>Wet</strong></span>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cargo ID</th>
+                        <th>Content</th>
+                        <th>Size</th>
+                        <th>Cargo Condition</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+    <div id="form-container">
+        <!-- Close button to hide the form -->
+        <button class="close-btn" onclick="closeForm()">×</button>
+
+        <!-- Add Cargo Form -->
+        <form id="add-cargo-form" onsubmit="submitCargoForm(event)">
+            <h3>Add Cargo</h3>
+            <label for="cargoId">Cargo ID:</label>
+            <input type="text" id="cargoId" name="cargoId" required>
+            <label for="content">Content:</label>
+            <input type="text" id="content" name="content" required>
+            <label for="size">Size:</label>
+            <input type="number" id="size" name="size" required>
+            <label for="storageCondition">Storage Condition:</label>
+            <input type="text" id="storageCondition" name="storageCondition" required>
+            <label for="currentLocation">Current Location:</label>
+            <input type="text" id="currentLocation" name="currentLocation" required>
+            <button type="submit">Add Cargo</button>
+        </form>
+
+        <!-- Allocate Cargo Form -->
+        <form id="allocate-cargo-form" style="display: none;" onsubmit="allocateCargo(event)">
+            <h3>Allocate Cargo</h3>
+            <label for="allocateCargoId">Cargo ID:</label>
+            <input type="text" id="allocateCargoId" name="cargoId" readonly>
+            <button type="submit">Allocate</button>
+        </form>
+    </div>
+    <script>
+        // Show Add Cargo Form with sliding effect
+        function showAddCargoForm() {
+            document.getElementById('form-container').classList.add('show');
+            document.getElementById('add-cargo-form').style.display = 'block';
+            document.getElementById('allocate-cargo-form').style.display = 'none';
+        }
+
+        // Close the form with sliding effect
+        function closeForm() {
+            document.getElementById('form-container').classList.remove('show');
+        }
+
+        // Handle Add Cargo Form Submission
+        async function submitCargoForm(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const cargoData = Object.fromEntries(formData.entries());
+
+            try {
+                const res = await fetch(`/api/cargo/add`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(cargoData),
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    alert(data.message);
+                    document.getElementById('add-cargo-form').style.display = 'none';
+                    document.getElementById('allocate-cargo-form').style.display = 'block';
+                    document.getElementById('allocateCargoId').value = cargoData.cargoId;
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                console.error('Error adding cargo:', err);
+            }
+        }
+
+        // Handle Allocate Cargo Form Submission
+        async function allocateCargo(event) {
+            event.preventDefault();
+            const cargoId = document.getElementById('allocateCargoId').value;
+
+            try {
+                const res = await fetch(`/api/cargo/${cargoId}/allocate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    alert(data.message);
+                    closeForm(); // Close the form after allocation
+                    window.location.reload();
+                } else {
+                    alert(data.error);
+                }
+            } catch (err) {
+                console.error('Error allocating cargo:', err);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            try {
+                const response = await fetch('/api/cargo/warehouses'); // Adjust the API path if necessary
+                if (!response.ok) throw new Error('Failed to fetch warehouse data');
+
+                const warehouses = await response.json();
+                displayWarehouses(warehouses);
+            } catch (error) {
+                console.error('Error fetching warehouses:', error);
+            }
+        });
+
+        function displayWarehouses(warehouses) {
+            const tabsContainer = document.querySelector('.tabs');
+            // const mainContent = document.querySelector('main');
+            const mainContent = document.getElementById('main');
+
+            tabsContainer.innerHTML = '';
+            mainContent.innerHTML = '';
+
+            warehouses.forEach((warehouse, index) => {
+                // Create tab
+                const tab = document.createElement('div');
+                tab.className = `tab ${index === 0 ? 'active' : ''}`;
+                tab.textContent = warehouse.name;
+                tab.onclick = () => showWarehouseInfo(index, warehouses);
+                tabsContainer.appendChild(tab);
+
+                // Create warehouse info
+                const storageInfo = `
+            <div class="storage-info">
+                <span>Total Storage: <strong>${warehouse.totalUnits}</strong></span>
+                <span>Available Storage: <strong style="color: ${warehouse.availableUnits > 0 ? 'green' : 'red'};">${warehouse.availableUnits}</strong></span>
+                <span>Room Condition: <strong>${warehouse.conditions.join(', ')}</strong></span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cargo ID</th>
+                        <th>Content</th>
+                        <th>Size</th>
+                        <th>Cargo Condition</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${warehouse.allocatedCargos.map(cargo => `
+                        <tr>
+                            <td>${cargo.cargoId}</td>
+                            <td>${cargo.content}</td>
+                            <td>${cargo.size}</td>
+                            <td>${cargo.storageCondition.join(', ')}</td>
+                            <td><button class="view-button" onclick="viewCargo('${cargo.cargoId}')">View</button></td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+
+                const warehouseDiv = document.createElement('div');
+                warehouseDiv.innerHTML = storageInfo;
+                warehouseDiv.style.display = index === 0 ? 'block' : 'none';
+                warehouseDiv.className = 'warehouse-content';
+                mainContent.appendChild(warehouseDiv);
+            });
+        }
+
+        function showWarehouseInfo(index, warehouses) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.warehouse-content');
+
+            tabs.forEach((tab, i) => tab.classList.toggle('active', i === index));
+            contents.forEach((content, i) => content.style.display = i === index ? 'block' : 'none');
+        }
+
+        function viewCargo(cargoId) {
+            alert(`Viewing details for Cargo ID: ${cargoId}`);
+            // Add functionality to view more cargo details.
+        }
+
+    </script>
+</body>
+
+</html>

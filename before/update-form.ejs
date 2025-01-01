@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Update Container Location</title>
+</head>
+<body>
+    <nav>
+        <a href="/dashboard">Go to Dashboard</a>
+    </nav>
+    
+    <h1>Update Container Location</h1>
+    <form action="/update-location" method="POST">
+        <input type="text" name="containerId" placeholder="Container ID" required>
+        <input type="text" name="content" placeholder="Content" required>
+        <input type="text" name="storageCondition" placeholder="Storage Condition" required>
+        <input type="text" name="size" placeholder="Size" required>
+        <select name="storageLocation" required>
+            <option value="Storage A">Storage A</option>
+            <option value="Storage B">Storage B</option>
+            <option value="Storage C">Storage C</option>
+        </select>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Cargo Management Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+</head>
+<body>
+    <video autoplay muted loop id="background-video">
+        <source src="cargo.mov" type="video/mp4">
+    </video>
+    
+    <!-- Login Page -->
+    <div id="login">
+        <h2>Admin Login</h2>
+        <p>Welcome back! Please log in to access your account.</p>
+        <div id="loginError"></div> 
+        <form id="loginForm">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your Username" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+            <div>
+                <button type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
