@@ -2,6 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
 
+    const video = document.getElementById('background-video');
+
+    // Disable controls
+    video.controls = false;
+
+    // Prevent pausing
+    video.addEventListener('pause', () => {
+        video.play();
+    });
+
+    // Prevent user from pausing video using spacebar or 'k' key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === ' ' || e.key === 'k') {
+            e.preventDefault();
+        }
+    });
+
+
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault(); // Prevent the default form submission
 
@@ -28,9 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 // Save the token and redirect to the dashboard or another page
                 localStorage.setItem('token', data.token);
-                setTimeout(function() {
+                setTimeout(function () {
                     window.location.href = '/dashboard';
-                  }, 2000);
+                }, 2000);
             }
         } catch (error) {
             loginError.textContent = 'Error connecting to the server. Please try again.';
@@ -38,3 +56,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
