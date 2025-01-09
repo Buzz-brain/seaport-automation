@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surveillance System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    #alerts {
+      margin-top: 20px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input[type="file"] {
+      margin-top: 20px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Surveillance System</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <label for="image">Upload Image for Detection:</label><br />
+    <input type="file" id="image" name="image" required /><br />
+    <button type="submit">Detect</button>
+  </form>
+
+  <div id="alerts">
+    <h2>Alerts</h2>
+  </div>
+
+  <div id="predictions">
+    <h2>Detected Objects</h2>
+    <ul id="predictionList"></ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <!-- Load the coco-ssd model. -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script>
+    const uploadForm = document.getElementById('uploadForm');
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const imageInput = document.getElementById('image');
+      const imageFile = imageInput.files[0];
+      const imageUrl = URL.createObjectURL(imageFile);
+      const image = new Image();
+      image.src = imageUrl;
+      await new Promise((resolve) => {
+        image.onload = resolve;
+      });
+      const predictions = await detectObjects(image);
+      const predictionList = document.getElementById('predictionList');
+      predictionList.innerHTML = ''; // Clear previous predictions
+
+      if (predictions.length > 0) {
+        predictions.forEach((obj) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `${obj.class} - Confidence: ${(obj.score * 100).toFixed(2)}%`;
+          predictionList.appendChild(listItem);
+        });
+      } else {
+        const noObjects = document.createElement('p');
+        noObjects.textContent = 'No objects detected.';
+        predictionList.appendChild(noObjects);
+      }
+    });
+  </script>
+  <script src="object-detection.js"></script>
+</body>
+
+</html>

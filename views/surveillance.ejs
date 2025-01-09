@@ -1,0 +1,431 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surveillance System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    #alerts {
+      margin-top: 20px;
+      padding: 10px;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input[type="file"] {
+      margin-top: 20px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #video-container {
+      position: relative;
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Surveillance System</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <label for="image">Upload Image for Detection:</label><br />
+    <input type="file" id="video-input" accept="video/*">
+    <div id="video-container" width="600px" height="600px">
+      <video id="video" width="600" height="480"></video>
+      <canvas id="canvas" width="600" height="480"></canvas>
+    </div>
+    <button type="submit">Detect</button>
+  </form>
+
+  <div id="alerts">
+    <h2>Alerts</h2>
+  </div>
+
+  <div id="predictions"
+    style="position: fixed; top:0; right:0; height: 100%; background-color: white; box-shadow: 1px 1px 1px black; width: 250px; padding: 20px;">
+    <h2>Detected Objects</h2>
+    <ul id="predictionList"></ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script>
+    const videoInput = document.getElementById('video-input');
+    const videoElement = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+
+    videoInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        const videoFile = e.target.files[0];
+        if (videoFile.type.startsWith('video/')) {
+          const videoUrl = URL.createObjectURL(videoFile);
+          videoElement.src = videoUrl;
+          videoElement.play();
+        } else {
+          console.error('Selected file is not a video file.');
+        }
+      }
+    });
+
+
+    async function detectObjectsOnVideo(videoElement) {
+      async function detectObjectsOnFrame() {
+        if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0 && canvas.width > 0 && canvas.height > 0 && canvas !== null) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height); 
+          ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height); 
+          const predictions = await detectObjects(canvas);
+          const predictionList = document.getElementById('predictionList');
+          predictionList.innerHTML = ''; 
+
+          if (predictions.length > 0) {
+            predictions.forEach((obj) => {
+              const x = obj.bbox[0];
+              const y = obj.bbox[1];
+              const width = obj.bbox[2];
+              const height = obj.bbox[3];
+              ctx.rect(x, y, width, height);
+              ctx.font = '8px Arial';
+              ctx.fillStyle = 'yellow';
+              ctx.fillText(`${obj.class} - ${(obj.score * 100).toFixed(2)}%`, x, y - 5);
+
+              const listItem = document.createElement('li');
+              listItem.textContent = `${obj.class} - Confidence: ${(obj.score * 100).toFixed(2)}%`;
+              predictionList.appendChild(listItem);
+            });
+          } else {
+            const noObjects = document.createElement('p');
+            noObjects.textContent = 'No objects detected.';
+            predictionList.appendChild(noObjects);
+          }
+
+        }
+
+        requestAnimationFrame(detectObjectsOnFrame);
+      }
+      detectObjectsOnFrame();
+    }
+
+    const uploadForm = document.getElementById('uploadForm');
+
+    uploadForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      detectObjectsOnVideo(videoElement);
+    });
+
+
+  </script>
+  <script src="object-detection.js"></script>
+</body>
+
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surveillance System</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+  body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+header {
+  background-color: blue;
+  color: #fff;
+  text-align: center;
+  height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header nav {
+  width: 90%;
+}
+header nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 1.5rem;
+}
+
+
+header nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2em;
+  height: 100vh;
+}
+
+#upload-section {
+  width: 320px;
+}
+
+section {
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+#video-container {
+  position: relative;
+}
+
+/* Form Styling */
+form {
+    max-width: 500px;
+    margin: 10px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+form input, form select, form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
+#canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#predictionList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#predictionList li {
+  margin-bottom: 10px;
+}
+
+#alerts {
+  padding: 1em;
+}
+
+#alerts-section, #detections-section {
+  width: 300px;
+}
+
+#no-video-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  color: #666;
+  text-align: center;
+}
+
+.switch {
+  position: fixed; 
+  top: 20%; 
+  left: 0; 
+  padding: 15px; 
+  border-radius: 0 20px 20px 0;
+  cursor: pointer; 
+  background-color: green; 
+  color: white;
+}
+.switch:hover {
+  background-color: rgba(0, 128, 0, 0.5);
+  color: white;
+}
+
+</style>
+<body>
+  <header>
+    <nav style="display: flex; justify-content: space-between;">
+        <a href="/dashboard"><div style="font-size: 1.2rem; cursor: pointer; background-color: black; padding: 10px 15px; border-radius: 10px;">Back</div></a>
+        <div style="font-size: 1.8rem;">Surveillance system</div>
+        <div style="font-size: 1.5rem;">system</div>
+    </nav>
+  </header>
+
+  <main style="position: relative;">
+
+    <a href="/liveSurveillance"><p class="switch">Switch to live mode</p></a>
+
+    <section id="upload-section" style="position: fixed; bottom: 0; left: 0;">
+      <h2 style="text-align: center;">Upload Video for Object Detection</h2>
+      <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="video-input" accept="video/*">
+        <button type="submit">Detect Objects</button>
+      </form>
+    </section>
+
+    <section id="video-section" style="background-color: black; color: white;">
+      <h2 class="margin-bottom: 20px">Video Feed</h2>
+      <div id="video-container">
+        <video id="video" width="650" height="400"></video>
+        <canvas id="canvas" width="650" height="400"></canvas>
+        <p id="no-video-text" style="border: 1px solid #ccc; font-size: 1.2rem; padding: 10px; border-radius: 10px;">No video yet, please upload a video for detection</p>
+      </div>
+    </section>
+
+    <section id="detections-section" style="position: fixed; top: 0; right: 0; height: 49%">
+      <h2 style="padding-bottom: 10px;">Detected Objects</h2>
+      <ul id="predictionList"></ul>
+    </section>
+
+    <section id="alerts-section" style="position: fixed; bottom: 0; right: 0; height: 49%">
+      <h2 style="padding-bottom: 10px;">Alerts</h2>
+      <div id="alerts"></div>
+    </section>
+    
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script>
+    const videoInput = document.getElementById('video-input');
+    const videoElement = document.getElementById('video');
+    const noVideoText = document.getElementById('no-video-text');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+  
+
+    videoInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        const videoFile = e.target.files[0];
+        if (videoFile.type.startsWith('video/')) {
+          const videoUrl = URL.createObjectURL(videoFile);
+          videoElement.src = videoUrl;
+          videoElement.play();
+          noVideoText.style.display = 'none';
+        } else {
+          console.error('Selected file is not a video file.');
+        }
+      }
+    });
+
+
+    async function detectObjectsOnVideo(videoElement) {
+      async function detectObjectsOnFrame() {
+        if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0 && canvas.width > 0 && canvas.height > 0 && canvas !== null) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height); 
+          ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height); 
+          const predictions = await detectObjects(canvas);
+          const predictionList = document.getElementById('predictionList');
+          predictionList.innerHTML = ''; 
+
+          if (predictions.length > 0) {
+            predictions.forEach((obj) => {
+              const x = obj.bbox[0];
+              const y = obj.bbox[1];
+              const width = obj.bbox[2];
+              const height = obj.bbox[3];
+              ctx.rect(x, y, width, height);
+              ctx.font = '15px Arial';
+              ctx.fillStyle = 'yellow';
+              ctx.fillText(`${obj.class} - ${(obj.score * 100).toFixed(2)}%`, x, y - 5);
+
+              const listItem = document.createElement('li');
+              listItem.textContent = `${obj.class} - Confidence: ${(obj.score * 100).toFixed(2)}%`;
+              predictionList.appendChild(listItem);
+            });
+          } else {
+            const noObjects = document.createElement('p');
+            noObjects.textContent = 'No objects detected.';
+            predictionList.appendChild(noObjects);
+          }
+
+        }
+
+        requestAnimationFrame(detectObjectsOnFrame);
+      }
+      detectObjectsOnFrame();
+    }
+
+    const uploadForm = document.getElementById('uploadForm');
+
+    uploadForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      detectObjectsOnVideo(videoElement);
+    });
+
+
+  </script>
+  <script src="object-detection.js"></script>
+</body>
+</html>
+

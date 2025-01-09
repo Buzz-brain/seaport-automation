@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Surveillance System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box  ;
+    }
+    body {
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    #video-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    #video,
+    #canvas {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    #controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #alerts {
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      height: 49%;
+      padding: 20px;
+    }
+
+    .alert {
+      background: #ffcccc;
+      border: 1px solid #ff0000;
+      padding: 5px;
+      margin-bottom: 10px;
+      border-radius: 3px;
+    }
+
+    #log {
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      height: 49%;
+      padding: 0 20px;
+    }
+
+    #log ul {
+      list-style: none;
+      padding: 0;
+    }
+    #log ul li {
+      background: #eef;
+      margin: 5px 0;
+      padding: 5px;
+      border-radius: 3px;
+    }
+
+    .switch {
+  position: fixed; 
+  top: 20%; 
+  left: 0; 
+  padding: 15px; 
+  border-radius: 0 20px 20px 0;
+  cursor: pointer; 
+  background-color: orange; 
+  color: white;
+}
+.switch:hover {
+  background-color: rgba(255, 166, 0, 0.8);
+  color: white;
+}
+  </style>
+</head>
+
+<body>
+  <h1>Advanced Surveillance System</h1>
+
+  <div id="video-container">
+    <video id="video" width="600" height="480" autoplay muted></video>
+    <canvas id="canvas" width="600" height="480"></canvas>
+  </div>
+
+  <a href="/surveillance"><p class="switch">Switch to test mode</p></a>
+
+  <div id="controls">
+    <button id="startBtn">Start Surveillance</button>
+    <button id="stopBtn" disabled>Stop Surveillance</button>
+  </div>
+
+  <div id="alerts" style="position: fixed; bottom:0; right:0; width: 280px; background-color:white;">
+    <h2>Alerts</h2>
+    <div id="alertList"></div>
+  </div>
+
+  <div id="log" style="position: fixed; top:0; right:0; width: 280px; background-color:white; overflow-y: scroll;">
+    <h2 style="position: fixed; background-color: white; width: 230px; padding: 15px 0" >Activity Log</h2>
+    <ul id="logList"></ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const alertList = document.getElementById("alertList");
+    const logList = document.getElementById("logList");
+
+    let model;
+    let interval;
+
+    async function loadModel() {
+      model = await cocoSsd.load();
+      console.log("Model loaded successfully!");
+    }
+
+    async function startVideo() {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      video.srcObject = stream;
+    }
+
+    function detectObjects() {
+      if (model) {
+        model.detect(video).then((predictions) => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          predictions.forEach((prediction) => {
+            const [x, y, width, height] = prediction.bbox;
+            ctx.strokeStyle = prediction.class === "person" ? "red" : "green";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, width, height);
+
+            ctx.font = "12px Arial";
+            ctx.fillStyle = "yellow";
+            ctx.fillText(
+              `${prediction.class} - ${(prediction.score * 100).toFixed(1)}%`,
+              x,
+              y - 10
+            );
+
+            logActivity(prediction);
+            if (isSuspicious(prediction)) {
+              triggerAlert(prediction);
+            }
+          });
+        });
+      }
+    }
+
+    function isSuspicious(prediction) {
+      const suspiciousItems = ["knife", "gun", "bag"];
+      return suspiciousItems.includes(prediction.class) && prediction.score > 0.7;
+    }
+
+    function triggerAlert(prediction) {
+      const alertItem = document.createElement("div");
+      alertItem.className = "alert";
+      alertItem.textContent = `Suspicious Activity Detected: ${prediction.class} (${(
+        prediction.score * 100
+      ).toFixed(1)}%)`;
+      alertList.appendChild(alertItem);
+    }
+
+    function logActivity(prediction) {
+      const logItem = document.createElement("li");
+      logItem.textContent = `Detected: ${prediction.class} (${(
+        prediction.score * 100
+      ).toFixed(1)}%) at ${new Date().toLocaleTimeString()}`;
+      logList.appendChild(logItem);
+    }
+
+    startBtn.addEventListener("click", () => {
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      interval = setInterval(detectObjects, 500);
+    });
+
+    stopBtn.addEventListener("click", () => {
+      clearInterval(interval);
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    });
+
+    loadModel();
+    startVideo();
+  </script>
+</body>
+
+</html>

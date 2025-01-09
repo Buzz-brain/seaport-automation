@@ -2,16 +2,19 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const multer = require('multer');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 require('dotenv').config();
+
+
 const cargoRoutes = require('./routes/cargo');
 const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
@@ -20,9 +23,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
+app.use(express.static(__dirname + '/public'));
+
 // Set up MongoDB connection
-mongoose.connect(process.env.MONGO_URI).then(() => console.log('Database connected'))
-  .catch((err) => console.error('Database connection error:', err));
+async function connectToMongoDB() {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('Database connected');
+  } catch (err) {
+    console.error('Database connection error:', err);
+  }
+}
+
+connectToMongoDB();
 
 // Routes -tested
 app.get('/', (req, res) => {
@@ -37,6 +50,12 @@ app.get('/tracking', (req, res) => {
 app.get('/allocation', (req, res) => {
   res.render('allocation');
 });
+app.get('/surveillance', (req, res) => {
+  res.render('surveillance');
+});
+app.get('/liveSurveillance', (req, res) => {
+  res.render('liveSurveillance');
+});
 
 // Middleware to pass io to routes
 app.use((req, res, next) => {
@@ -47,29 +66,39 @@ app.use((req, res, next) => {
 app.use('/api/cargo', cargoRoutes);
 app.use('/api/auth', authRoutes);
 
-// const Warehouse = require('./models/warehouse');
-// const Cargo = require('./models/cargo');
+// Multer Configuration for File Uploads
+const upload = multer({ dest: 'uploads/' });
 
-// const warehouses = [
-//   { name: 'Warehouse A', availableUnits: 500, conditions: ['Dry'], totalUnits: 500 },
-//   { name: 'Warehouse B', availableUnits: 1000, conditions: ['Cold'], totalUnits: 1000 },
-//   { name: 'Warehouse C', availableUnits: 200, conditions: ['Dry'], totalUnits: 200 },
-// ];
+// app.post('/detect', upload.single('image'), async (req, res) => {
+//   try {
+//     // Just return a success message, the actual object detection will be handled in the browser
+//     res.json({ message: 'Image uploaded successfully' });
+//   } catch (err) {
+//     console.error('Error during object detection:', err);
+//     res.status(500).json({ error: 'Error detecting objects' });
+//   }
+// });
 
-// const cargos = [
-//   { cargoId: 'CARGO001', content: 'Books', size: 50, storageCondition: ['Dry'], currentLocation: 'Port A' },
-//   { cargoId: 'CARGO002', content: 'Fruits', size: 200, storageCondition: ['Cold'], currentLocation: 'Port B' },
-//   { cargoId: 'CARGO003', content: 'Electronics', size: 100, storageCondition: ['Dry'], currentLocation: 'Port C' },
-// ];
+app.post('/detect', upload.single('video'), async (req, res) => {
+  try {
+    // Just return a success message, the actual object detection will be handled in the browser
+    res.json({ message: 'Video uploaded successfully' });
+  } catch (err) {
+    console.error('Error during video upload:', err);
+    res.status(500).json({ error: 'Error uploading video' });
+  }
+});
 
-// Cargo.insertMany(cargos)
-//   .then(() => console.log('Cargos added'))
-//   .catch((err) => console.log('Error adding cargos:', err));
 
-// Warehouse.insertMany(warehouses)
-//   .then(() => console.log('Warehouses added'))
-//   .catch((err) => console.log('Error adding warehouses:', err));
 
+// WebSocket Events
+io.on('connection', (socket) => {
+  console.log('Admin connected to WebSocket');
+  socket.on('disconnect', () => console.log('Admin disconnected'));
+  socket.on('error', (err) => console.error('WebSocket error:', err));
+});
+
+server.listen(3000, () => console.log('Server running on port 3000'));
 
 // Start the server
 app.listen(PORT, () => {
