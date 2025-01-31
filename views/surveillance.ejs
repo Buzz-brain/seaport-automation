@@ -378,43 +378,69 @@ form button:hover {
       }
     });
 
+    const alertsSection = document.getElementById('alerts');
 
-    async function detectObjectsOnVideo(videoElement) {
-      async function detectObjectsOnFrame() {
-        if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0 && canvas.width > 0 && canvas.height > 0 && canvas !== null) {
-          ctx.clearRect(0, 0, canvas.width, canvas.height); 
-          ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height); 
-          const predictions = await detectObjects(canvas);
-          const predictionList = document.getElementById('predictionList');
-          predictionList.innerHTML = ''; 
-
-          if (predictions.length > 0) {
-            predictions.forEach((obj) => {
-              const x = obj.bbox[0];
-              const y = obj.bbox[1];
-              const width = obj.bbox[2];
-              const height = obj.bbox[3];
-              ctx.rect(x, y, width, height);
-              ctx.font = '15px Arial';
-              ctx.fillStyle = 'yellow';
-              ctx.fillText(`${obj.class} - ${(obj.score * 100).toFixed(2)}%`, x, y - 5);
-
-              const listItem = document.createElement('li');
-              listItem.textContent = `${obj.class} - Confidence: ${(obj.score * 100).toFixed(2)}%`;
-              predictionList.appendChild(listItem);
-            });
-          } else {
-            const noObjects = document.createElement('p');
-            noObjects.textContent = 'No objects detected.';
-            predictionList.appendChild(noObjects);
-          }
-
-        }
-
-        requestAnimationFrame(detectObjectsOnFrame);
+async function detectObjectsOnVideo(videoElement) {
+  async function detectObjectsOnFrame() {
+    if (videoElement.videoWidth > 0 && videoElement.videoHeight > 0 && canvas.width > 0 && canvas.height > 0 && canvas !== null) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+      const predictions = await detectObjects(canvas);
+      const predictionList = document.getElementById('predictionList');
+      predictionList.innerHTML = '';
+      alertsSection.innerHTML = ''; // Clear previous alerts
+      if (predictions.length > 0) {
+        const detectedObjects = predictions.map((obj) => obj.class);
+        const alertMessages = getAlertMessages(detectedObjects);
+        alertMessages.forEach((message) => {
+          const alertElement = document.createElement('p');
+          alertElement.textContent = message;
+          alertElement.style.color = 'red';
+          alertsSection.appendChild(alertElement);
+        });
+        predictions.forEach((obj) => {
+          const x = obj.bbox[0];
+          const y = obj.bbox[1];
+          const width = obj.bbox[2];
+          const height = obj.bbox[3];
+          ctx.rect(x, y, width, height);
+          ctx.font = '15px Arial';
+          ctx.fillStyle = 'yellow';
+          ctx.fillText(`${obj.class} - ${(obj.score * 100).toFixed(2)}%`, x, y - 5);
+          const listItem = document.createElement('li');
+          listItem.textContent = `${obj.class} - Confidence: ${(obj.score * 100).toFixed(2)}%`;
+          predictionList.appendChild(listItem);
+        });
+      } else {
+        const noObjects = document.createElement('p');
+        noObjects.textContent = 'No objects detected.';
+        predictionList.appendChild(noObjects);
       }
-      detectObjectsOnFrame();
     }
+    requestAnimationFrame(detectObjectsOnFrame);
+  }
+  detectObjectsOnFrame();
+}
+
+function getAlertMessages(detectedObjects) {
+  const alertMessages = [];
+  if (detectedObjects.includes('knife') && detectedObjects.includes('person')) {
+    alertMessages.push('Potential threat detected: knife and person nearby!');
+  }
+  if (detectedObjects.includes('gun') && detectedObjects.includes('person')) {
+    alertMessages.push('Potential threat detected: gun and person nearby!');
+  }
+  if (detectedObjects.includes('gun') && detectedObjects.includes('person')) {
+    alertMessages.push('Potential threat detected: gun and person nearby!');
+  }
+  if (detectedObjects.includes('person')) {
+    alertMessages.push('Alert a person detected');
+  }
+  
+  // Add more alert conditions as needed
+  return alertMessages;
+}
+
 
     const uploadForm = document.getElementById('uploadForm');
 
