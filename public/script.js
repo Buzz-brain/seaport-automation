@@ -2,15 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const loginError = document.getElementById('loginError');
 
-    const video = document.getElementById('background-video');
+    // const video = document.getElementById('background-video');
 
     // Disable controls
-    video.controls = false;
+    // video.controls = false;
 
     // Prevent pausing
-    video.addEventListener('pause', () => {
-        video.play();
-    });
+    // video.addEventListener('pause', () => {
+    //     video.play();
+    // });
 
     // Prevent user from pausing video using spacebar or 'k' key
     document.addEventListener('keydown', (e) => {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Save the token and redirect to the dashboard or another page
                 localStorage.setItem('token', data.token);
                 setTimeout(function () {
-                    window.location.href = '/dashboard';
+                    window.location.href = '/surveillance';
                 }, 2000);
             }
         } catch (error) {

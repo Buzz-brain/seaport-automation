@@ -14,7 +14,7 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5100;
 
 // Middleware
 app.use(cors());
@@ -98,7 +98,7 @@ io.on('connection', (socket) => {
   socket.on('error', (err) => console.error('WebSocket error:', err));
 });
 
-server.listen(3000, () => console.log('Server running on port 3000'));
+server.listen(3100, () => console.log('Server running on port 3000'));
 
 // Start the server
 app.listen(PORT, () => {
