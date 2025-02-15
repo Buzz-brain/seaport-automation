@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Save the token and redirect to the dashboard or another page
                 localStorage.setItem('token', data.token);
                 setTimeout(function () {
-                    window.location.href = '/surveillance';
+                    window.location.href = '/dashboard';
                 }, 2000);
             }
         } catch (error) {
