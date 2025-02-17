@@ -22,16 +22,115 @@
         <div id="loginError"></div>
         <form id="loginForm">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter your Email" required>
+            <input type="email" id="email" name="email" placeholder="Enter your Email Address" required>
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+            <label for="role">Role</label>
+            <select name="role" id="role">
+                <option value="" disabled>Select Role</option>
+                <option value="portAuthority">Port Authority (NPA)</option>
+                <option value="securityOfficer">Security Officer</option>
+                <option value="terminalOperator">Terminal Operator</option>
+                <option value="superAdmin">Super Admin</option>
+            </select>
             <div>
                 <button type="submit">Login</button>
             </div>
         </form>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const loginError = document.getElementById('loginError');
+
+            // const video = document.getElementById('background-video');
+
+            // Disable controls
+            // video.controls = false;
+
+            // Prevent pausing
+            // video.addEventListener('pause', () => {
+            //     video.play();
+            // });
+
+            // Prevent user from pausing video using spacebar or 'k' key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === ' ' || e.key === 'k') {
+                    e.preventDefault();
+                }
+            });
+
+
+            loginForm.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Get the form data
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const role = document.getElementById('role').value;
+
+                console.log(email, password, role)
+                try {
+                    // Send a POST request to the backend
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email, password, role }),
+                    });
+
+                    const data = await response.json();
+                    if (data.token) {
+                        // Login successful, display success message and save token
+                        loginError.textContent = 'Login successful';
+                        loginError.style.color = 'green';
+                        localStorage.setItem('token', data.token);
+
+                        // Redirect to different pages based on user role
+                        setTimeout(function () {
+                            switch (role) {
+                                case 'portAuthority':
+                                case 'superAdmin':
+                                    window.location.href = '/tracking';
+                                    break;
+                                case 'securityOfficer':
+                                case 'superAdmin':
+                                    window.location.href = '/surveillance';
+                                    break;
+                                case 'terminalOperator':
+                                case 'superAdmin':
+                                    window.location.href = '/allocation';
+                                    break;
+                                case 'superAdmin':
+                                    window.location.href = '/dashboard';
+                                    break;
+                                default:
+                                    loginError.textContent = 'Invalid role';
+                                    loginError.style.color = 'red';
+                            }
+                        }, 1000);
+
+                    } else {
+                        // Login failed, display error message
+                        loginError.textContent = data.message;
+                        loginError.style.color = 'red';
+                        // Remove error message after 2 seconds
+                        setTimeout(function () {
+                            loginError.textContent = '';
+                        }, 2000);
+                    }
+                } catch (error) {
+                    loginError.textContent = 'Error connecting to the server. Please try again.';
+                    loginError.style.color = 'red';
+                }
+            });
+        });
+
+
+
+    </script>
 </body>
 
 </html>
