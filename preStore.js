@@ -8,9 +8,9 @@
 // ];
 
 // const cargos = [
-//   { cargoId: 'CARGO001', content: 'Books', size: 50, storageCondition: ['Dry'], currentLocation: 'Port A' },
-//   { cargoId: 'CARGO002', content: 'Fruits', size: 200, storageCondition: ['Cold'], currentLocation: 'Port B' },
-//   { cargoId: 'CARGO003', content: 'Electronics', size: 100, storageCondition: ['Dry'], currentLocation: 'Port C' },
+//   { cargoId: 'CARGO001', content: 'Books', size: 50, storageCondition: ['Dry'], currentLocation: 'Arrival' },
+//   { cargoId: 'CARGO002', content: 'Fruits', size: 200, storageCondition: ['Cold'], currentLocation: 'Arrival' },
+//   { cargoId: 'CARGO003', content: 'Electronics', size: 100, storageCondition: ['Dry'], currentLocation: 'Arrival' },
 // ];
 
 // Cargo.insertMany(cargos)

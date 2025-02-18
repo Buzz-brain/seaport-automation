@@ -2,10 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Cargo = require('../models/cargo');
 const Warehouse = require('../models/warehouse');
-const authenticate = require('../middleware/auth');
-
-// router.use(authenticate);
-
 
 // CARGO TRACKNG SECTION
 
