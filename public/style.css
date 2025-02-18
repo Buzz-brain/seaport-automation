@@ -78,13 +78,10 @@ button {
     border: none;
     border-radius: 10px;
     cursor: pointer;
-<<<<<<< HEAD
     transition: all .5s ease;
 }
 button:hover {
     background-color: transparent;
     border: 1px solid blue;
     color: blue;
-=======
->>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
 }

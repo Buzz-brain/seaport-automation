@@ -14,6 +14,10 @@ router.put('/location', async (req, res) => {
         const cargo = await Cargo.findOne({ cargoId: cargoId });
         if (!cargo) return res.status(404).json({ error: 'Cargo not found' });
 
+        if (newLocation === 'Exit' && cargo.customsStatus !== 'cleared') {
+          return res.status(400).json({ error: 'Cargo cannot exit without being cleared' });
+        }    
+
         cargo.currentLocation = newLocation;
         cargo.movementHistory.push({ location: newLocation });
         await cargo.save();
@@ -63,6 +67,7 @@ router.get('/search', async (req, res) => {
 // Add cargo route -tested
 router.post('/add', async (req, res) => {
     try {
+      console.log(req.body)
         const { cargoId, content, size, storageCondition, currentLocation } = req.body;
         const newCargo = new Cargo({
             cargoId,
@@ -85,6 +90,7 @@ router.post('/add', async (req, res) => {
 
 router.post('/:cargoId/allocate', async (req, res) => {
   try {
+    console.log(req.params)
     const { cargoId } = req.params;
 
     // Find the cargo
@@ -131,6 +137,21 @@ router.get('/warehouses', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: 'Error fetching warehouses', details: err.message });
     }
+});
+
+router.put('/customs-status', async (req, res) => {
+  try {
+    console.log(req.body)
+    const { cargoId, customsStatus } = req.body;
+    const cargo = await Cargo.findOneAndUpdate({ cargoId }, { customsStatus }, { new: true });
+    if (!cargo) {
+      return res.status(404).json({ error: 'Cargo not found' });
+    }
+    res.json({ message: 'Customs status updated successfully' });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: 'Error updating customs status' });
+  }
 });
 
 

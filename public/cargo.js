@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${cargo.size || 'N/A'}</td>
                 <td>${cargo.storageCondition || 'N/A'}</td>
                 <td>${cargo.currentLocation}</td>
+                <td>${cargo.customsStatus}</td>
                 <td>${new Date(cargo.updatedAt).toLocaleString()}</td>
                 <td>${cargo.movementHistory.map(hist => hist.location).join(' -> ') || 'No history'}</td>
             `;
@@ -85,4 +86,36 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('An unexpected error occurred. Please try again.');
         }
     });
+
+    document.getElementById('updateCustomsStatusButton').addEventListener('click', async () => {
+        const cargoId = document.getElementById('updateCargoIdCustoms').value;
+        const newCustomsStatus = document.getElementById('newCustomsStatus').value;
+      
+        if (!cargoId || !newCustomsStatus) {
+          alert('Please fill out both fields.');
+          return;
+        }
+      
+        try {
+          const response = await fetch(`/api/cargo/customs-status`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cargoId, customsStatus: newCustomsStatus }),
+          });
+      
+          const result = await response.json();
+      
+          if (response.ok) {
+            alert(`Customs status updated successfully for Cargo ID: ${cargoId}`);
+            window.location.reload();
+          } else {
+            alert(`Error: ${result.error}`);
+        }
+      } catch (err) {
+        alert('An unexpected error occurred. Please try again.');
+      }
+    });
+          
 });

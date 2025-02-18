@@ -5,14 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cargo Tracking</title>
-    <link rel="stylesheet" href="cargo.css">
     <style>
-        /* General Reset */
+        /* General Styling */
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
         * {
+            font-family: "Poppins", sans-serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
         }
 
         /* Body Styling */
@@ -98,7 +101,8 @@
             background-color: #f1f1f1;
         }
 
-        .update-location {
+        .update-location,
+        .update-customs-status {
             margin: 2rem 0;
             width: 30%;
             background-color: #fff;
@@ -109,6 +113,11 @@
             position: sticky;
             left: 100%;
             bottom: 0;
+        }
+
+        .update-customs-status {
+            left: 0%;
+
         }
 
 
@@ -173,6 +182,7 @@
                         <th>SIZE</th>
                         <th>STORAGE CONDITION</th>
                         <th>CURRENT LOCATION</th>
+                        <th>CUSTOM STATUS</th>
                         <th>LAST UPDATED</th>
                         <th>MOVEMENT HISTORY</th>
                     </tr>
@@ -197,12 +207,29 @@
                 <option value="Point B">Point B</option>
                 <option value="Point C">Point C</option>
                 <option value="Point D">Point D</option>
-                <option value="Destination">Destination</option>
-                <option value="Cleared">Cleared</option>
+                <option value="Exit">Exit</option>
             </select>
             <button id="updateButton">Update Location</button>
         </div>
     </section>
+
+    <!-- Update Customs Status Section -->
+    <section class="update-customs-status">
+        <p>Customs Status Simulator</p><br>
+        <h2>Update Customs Status</h2>
+        <div class="update-form">
+            <input type="text" id="updateCargoIdCustoms" placeholder="Enter Cargo ID">
+            <select id="newCustomsStatus">
+                <option value="" disabled selected>Select New Customs Status</option>
+                <option value="cleared">Cleared</option>
+                <option value="pending">Pending</option>
+                <option value="rejected">Rejected</option>
+            </select>
+            <button id="updateCustomsStatusButton">Update Customs Status</button>
+        </div>
+    </section>
+
+
     <script src="cargo.js"></script>
 </body>
 

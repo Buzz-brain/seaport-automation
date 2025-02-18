@@ -7,12 +7,17 @@
     <title>Storage Allocation</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        }
+/* General Styling */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
 
         body {
             font-family: Arial, sans-serif;
@@ -225,9 +230,14 @@
             <label for="size">Size:</label>
             <input type="number" id="size" name="size" required>
             <label for="storageCondition">Storage Condition:</label>
-            <input type="text" id="storageCondition" name="storageCondition" required>
+            <select name="storageCondition" id="storageCondition" required>
+                <option value="Dry">Dry</option>
+                <option value="Cold">Cold</option>
+            </select>
             <label for="currentLocation">Current Location:</label>
-            <input type="text" id="currentLocation" name="currentLocation" value="Arrival" disabled required>
+            <input type="text" id="currentLocation" name="currentLocation" value="Arrived" readonly required>
+            <label for="customStatus">Custom Status:</label>
+            <input type="text" id="customStatus" name="customStatus" placeholder="Pending" disabled required>
             <button type="submit">Add Cargo</button>
         </form>
 
