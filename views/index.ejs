@@ -21,11 +21,16 @@
         <p>Please log in to access your account.</p>
         <div id="loginError"></div>
         <form id="loginForm">
+<<<<<<< HEAD
             <label for="email">Email Address</label>
+=======
+            <label for="email">Email</label>
+>>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
             <input type="email" id="email" name="email" placeholder="Enter your Email Address" required>
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="Enter your Password" required>
             <label for="role">Role</label>
+<<<<<<< HEAD
             <select id="role" name="role" required>
                 <option value="" disabled>Select Role</option>
                 <option value="portAuthority">Port Authority</option>
@@ -34,6 +39,15 @@
                 <option value="superAdmin">Super Admin</option>
             </select>
             
+=======
+            <select name="role" id="role">
+                <option value="" disabled>Select Role</option>
+                <option value="portAuthority">Port Authority (NPA)</option>
+                <option value="securityOfficer">Security Officer</option>
+                <option value="terminalOperator">Terminal Operator</option>
+                <option value="superAdmin">Super Admin</option>
+            </select>
+>>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
             <div>
                 <button type="submit">Login</button>
             </div>
@@ -62,6 +76,10 @@
                 }
             });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
             loginForm.addEventListener('submit', async (event) => {
                 event.preventDefault(); // Prevent the default form submission
 
@@ -70,6 +88,10 @@
                 const password = document.getElementById('password').value;
                 const role = document.getElementById('role').value;
 
+<<<<<<< HEAD
+=======
+                console.log(email, password, role)
+>>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
                 try {
                     // Send a POST request to the backend
                     const response = await fetch('/api/auth/login', {
@@ -81,6 +103,7 @@
                     });
 
                     const data = await response.json();
+<<<<<<< HEAD
 
 
                     if (response.status === 200) {
@@ -93,24 +116,69 @@
                         setTimeout(function () {
                             window.location.href = '/dashboard';
                         }, 1000);
+=======
+                    if (data.token) {
+                        // Login successful, display success message and save token
+                        loginError.textContent = 'Login successful';
+                        loginError.style.color = 'green';
+                        localStorage.setItem('token', data.token);
+
+                        // Redirect to different pages based on user role
+                        setTimeout(function () {
+                            switch (role) {
+                                case 'portAuthority':
+                                case 'superAdmin':
+                                    window.location.href = '/tracking';
+                                    break;
+                                case 'securityOfficer':
+                                case 'superAdmin':
+                                    window.location.href = '/surveillance';
+                                    break;
+                                case 'terminalOperator':
+                                case 'superAdmin':
+                                    window.location.href = '/allocation';
+                                    break;
+                                case 'superAdmin':
+                                    window.location.href = '/dashboard';
+                                    break;
+                                default:
+                                    loginError.textContent = 'Invalid role';
+                                    loginError.style.color = 'red';
+                            }
+                        }, 1000);
+
+>>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
                     } else {
                         // Login failed, display error message
                         loginError.textContent = data.message;
                         loginError.style.color = 'red';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
                         // Remove error message after 2 seconds
                         setTimeout(function () {
                             loginError.textContent = '';
                         }, 2000);
                     }
+<<<<<<< HEAD
 
                 } catch (error) {
                     console.log(error)
+=======
+                } catch (error) {
+>>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
                     loginError.textContent = 'Error connecting to the server. Please try again.';
                     loginError.style.color = 'red';
                 }
             });
         });
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 0ff16e3b70c68a7d5af2a4c09726bda34a1a35b1
     </script>
 </body>
 

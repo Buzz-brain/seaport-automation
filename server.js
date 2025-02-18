@@ -37,11 +37,19 @@ connectToMongoDB();
 
 // Routes with Role-Based Access Control
 app.get('/', (req, res) => res.render('index'));
-app.get('/tracking', rbac(['portAuthority', 'superAdmin']), (req, res) => res.render('tracking'));
-app.get('/surveillance', rbac(['securityOfficer', 'superAdmin']), (req, res) => res.render('surveillance'));
-app.get('/liveSurveillance', rbac(['securityOfficer', 'superAdmin']), (req, res) => res.render('liveSurveillance'));
-app.get('/allocation', rbac(['custom', 'superAdmin']), (req, res) => res.render('allocation'));
-app.get('/dashboard', rbac(['superAdmin']), (req, res) => res.render('dashboard'));
+// app.get('/tracking', rbac(['portAuthority', 'superAdmin']), (req, res) => res.render('tracking'));
+// app.get('/surveillance', rbac(['securityOfficer', 'superAdmin']), (req, res) => res.render('surveillance'));
+// app.get('/surveillance', rbac(['securityOfficer', 'superAdmin']), (req, res) => res.render('surveillance'));
+// app.get('/liveSurveillance', rbac(['securityOfficer', 'superAdmin']), (req, res) => res.render('liveSurveillance'));
+// app.get('/allocation', rbac(['terminalOperator', 'superAdmin']), (req, res) => res.render('allocation'));
+// app.get('/dashboard', rbac(['superAdmin']), (req, res) => res.render('dashboard'));
+
+app.get('/tracking', (req, res) => res.render('tracking'));
+app.get('/surveillance', (req, res) => res.render('surveillance'));
+app.get('/surveillance', (req, res) => res.render('surveillance'));
+app.get('/liveSurveillance', (req, res) => res.render('liveSurveillance'));
+app.get('/allocation', (req, res) => res.render('allocation'));
+app.get('/dashboard', (req, res) => res.render('dashboard'));
 
 // Middleware to pass io to routes
 app.use((req, res, next) => { req.io = io; next(); });
