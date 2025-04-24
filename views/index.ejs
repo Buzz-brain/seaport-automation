@@ -90,6 +90,9 @@
                         // Redirect to different pages based on user role
                         setTimeout(function () {
                             switch (role) {
+                                case 'superAdmin':
+                                    window.location.href = '/dashboard';
+                                    break;
                                 case 'portAuthority':
                                 case 'superAdmin':
                                     window.location.href = '/tracking';
@@ -101,9 +104,6 @@
                                 case 'terminalOperator':
                                 case 'superAdmin':
                                     window.location.href = '/allocation';
-                                    break;
-                                case 'superAdmin':
-                                    window.location.href = '/dashboard';
                                     break;
                                 default:
                                     loginError.textContent = 'Invalid role';

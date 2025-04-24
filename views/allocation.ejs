@@ -173,10 +173,10 @@
 
 <body>
     <header style="display: flex; justify-content: space-around;">
-        <a href="/dashboard"><button
-            style="padding: 15px; border-radius: 5px; outline: none; border: none; font-size: 1rem; cursor: pointer;"
-            onclick="showAddCargoForm()">Back</button></a>
-        <p>Storage Allocation</p>
+
+        <button class="backBtn" style="padding: 15px; border-radius: 5px; outline: none; border: none; font-size: 1rem; cursor: pointer;" onclick="goBack()">Logout</button>
+
+        <p style="color: white">Storage Allocation</p>
 
         <button
             style="padding: 15px; border-radius: 5px; outline: none; border: none; font-size: 1rem; cursor: pointer;"
@@ -250,6 +250,9 @@
         </form>
     </div>
     <script>
+            function goBack() {
+    window.history.back();
+  }
         // Show Add Cargo Form with sliding effect
         function showAddCargoForm() {
             document.getElementById('form-container').classList.add('show');

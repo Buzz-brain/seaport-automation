@@ -319,7 +319,8 @@ form button:hover {
 <body>
   <header>
     <nav style="display: flex; justify-content: space-between;">
-        <a href="/dashboard"><div style="font-size: 1.2rem; cursor: pointer; background-color: black; padding: 10px 15px; border-radius: 10px;">Back</div></a>
+        <button class="backBtn" style="font-size: 1.2rem; cursor: pointer; background-color: black; color: white; padding: 10px 15px; border-radius: 10px;" onclick="goBack()">Logout</button>
+
         <div style="font-size: 1.8rem;">Surveillance system</div>
         <div style="font-size: 1.5rem;">system</div>
     </nav>
@@ -345,6 +346,9 @@ form button:hover {
         <p id="no-video-text" style="border: 1px solid #ccc; font-size: 1.2rem; padding: 10px; border-radius: 10px;">No video yet, please upload a video for detection</p>
       </div>
     </section>
+<!-- Add an audio element to your HTML file -->
+<audio id="alert-sound" src="/beep.mp3" style="display: none;"></audio>
+
 
     <section id="detections-section" style="position: fixed; top: 0; right: 0; height: 49%">
       <h2 style="padding-bottom: 10px;">Detected Objects</h2>
@@ -367,7 +371,9 @@ form button:hover {
     const noVideoText = document.getElementById('no-video-text');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
-  
+    function goBack() {
+    window.history.back();
+  }
 
     videoInput.addEventListener('change', (e) => {
       if (e.target.files && e.target.files.length > 0) {
@@ -431,19 +437,33 @@ function getAlertMessages(detectedObjects) {
   const alertMessages = [];
   if (detectedObjects.includes('knife') && detectedObjects.includes('person')) {
     alertMessages.push('Potential threat detected: knife and person nearby!');
+    playAlertSound(); // Play the beep sound
+
   }
   if (detectedObjects.includes('gun') && detectedObjects.includes('person')) {
     alertMessages.push('Potential threat detected: gun and person nearby!');
-  }drz
+    playAlertSound(); // Play the beep sound
+
+  }
   if (detectedObjects.includes('gun') && detectedObjects.includes('person')) {
     alertMessages.push('Potential threat detected: gun and person nearby!');
+    playAlertSound(); // Play the beep sound
+
   }
-  if (detectedObjects.includes('person')) {
-    alertMessages.push('Alert a person detected');
-  }
+  // if (detectedObjects.includes('person')) {
+  //   alertMessages.push('Alert a person detected');
+  // }
+
+  
   
   // Add more alert conditions as needed
   return alertMessages;
+}
+
+// Add a function to play the beep sound
+function playAlertSound() {
+  const alertSound = document.getElementById('alert-sound');
+  alertSound.play();
 }
 
 

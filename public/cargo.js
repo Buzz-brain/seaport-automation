@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cargoSearch = document.getElementById('cargoSearch');
     const tbody = document.querySelector('tbody');
 
+
+
     // Fetch all cargos initially
     const fetchAllCargos = async () => {
         try {
@@ -38,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+
+    
     // Search cargos
     searchButton.addEventListener('click', async () => {
         const query = cargoSearch.value.trim();
@@ -119,3 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
           
 });
+function goBack() {
+    window.history.back();
+  }
