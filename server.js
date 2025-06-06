@@ -6,7 +6,7 @@ const multer = require('multer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-
+MONGO_URI=mongodb+srv://chinomsochristian03:ahYZxLh5loYrfgss@cluster0.dmkcl.mongodb.net/seaauto?retryWrites=true&w=majority
 const cargoRoutes = require('./routes/cargo');
 const authRoutes = require('./routes/authRoutes');
 const rbac = require('./middleware/rbac.middleware');
