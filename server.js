@@ -21,6 +21,20 @@ require('dotenv').config();
     "role": "terminalOperator"
 }
 
+{
+    "email": "adaobionwuachu75@gmail.com",
+    "username": "Adaobi",
+    "password": "1234",
+    "role": "securityOfficer"
+}
+
+{
+    "email": "adaobionwuachu@gmail.com",
+    "username": "Adaobi",
+    "password": "1234",
+    "role": "portAuthority"
+}
+
 const cargoRoutes = require('./routes/cargo');
 const authRoutes = require('./routes/authRoutes');
 const rbac = require('./middleware/rbac.middleware');
