@@ -49,6 +49,7 @@ app.get('/surveillance', (req, res) => res.render('surveillance'));
 app.get('/surveillance', (req, res) => res.render('surveillance'));
 app.get('/liveSurveillance', (req, res) => res.render('liveSurveillance'));
 app.get('/allocation', (req, res) => res.render('allocation'));
+app.get('/driver', (req, res) => res.render('driver'));
 app.get('/dashboard', (req, res) => res.render('dashboard'));
 
 // Middleware to pass io to routes
@@ -67,6 +68,19 @@ app.post('/detect', upload.single('video'), async (req, res) => {
     res.status(500).json({ error: 'Error uploading video' });
   }
 });
+
+// const Warehouse = require('./models/warehouse');
+
+// const warehouses = [
+//   { name: 'Warehouse A', availableUnits: 500, conditions: ['Dry'], totalUnits: 500 },
+//   { name: 'Warehouse B', availableUnits: 1000, conditions: ['Cold'], totalUnits: 1000 },
+//   { name: 'Warehouse C', availableUnits: 200, conditions: ['Dry'], totalUnits: 200 },
+// ];
+
+// Warehouse.insertMany(warehouses)
+//   .then(() => console.log('Warehouses added'))
+//   .catch((err) => console.log('Error adding warehouses:', err));
+
 
 // WebSocket Events
 io.on('connection', (socket) => {

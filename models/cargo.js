@@ -15,6 +15,7 @@ const CargoSchema = new mongoose.Schema({
   arrivalTime: { type: Date, default: Date.now },
   departureTime: { type: Date },
   customsStatus: { type: String, enum: ['cleared', 'pending', 'rejected'], default: 'pending' },
+  warehouse: { type: mongoose.Schema.Types.ObjectId, ref: 'Warehouse' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Cargo', CargoSchema);

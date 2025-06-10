@@ -206,6 +206,7 @@
                         <th>Content</th>
                         <th>Size</th>
                         <th>Cargo Condition</th>
+                        <th>Custom Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -358,6 +359,7 @@
                         <th>Content</th>
                         <th>Size</th>
                         <th>Cargo Condition</th>
+                        <th>Custom Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -368,6 +370,7 @@
                             <td>${cargo.content}</td>
                             <td>${cargo.size}</td>
                             <td>${cargo.storageCondition.join(', ')}</td>
+                            <td>${cargo.customsStatus}</td>
                             <td><button class="view-button" onclick="viewCargo('${cargo.cargoId}')">View</button></td>
                         </tr>
                     `).join('')}

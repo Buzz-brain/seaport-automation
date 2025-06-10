@@ -32,6 +32,7 @@
                 <option value="securityOfficer">Security Officer</option>
                 <option value="terminalOperator">Terminal Operator</option>
                 <option value="superAdmin">Super Admin</option>
+                <option value="driver">Driver</option>
             </select>
             <div>
                 <button type="submit">Login</button>
@@ -104,6 +105,10 @@
                                 case 'terminalOperator':
                                 case 'superAdmin':
                                     window.location.href = '/allocation';
+                                    break;
+                                case 'driver':
+                                case 'superAdmin':
+                                    window.location.href = '/driver';
                                     break;
                                 default:
                                     loginError.textContent = 'Invalid role';

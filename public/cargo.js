@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${cargo.size || 'N/A'}</td>
                 <td>${cargo.storageCondition || 'N/A'}</td>
                 <td>${cargo.currentLocation}</td>
+                <td>${cargo.warehouse.name}</td>
                 <td>${cargo.customsStatus}</td>
                 <td>${new Date(cargo.updatedAt).toLocaleString()}</td>
                 <td>${cargo.movementHistory.map(hist => hist.location).join(' -> ') || 'No history'}</td>
