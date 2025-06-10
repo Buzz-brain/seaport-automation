@@ -6,31 +6,6 @@ const nodemailer = require('nodemailer');
 
 // CARGO TRACKNG SECTION
 
-// Update location route -tested
-// router.put('/location', async (req, res) => {
-//     try {
-//         const { cargoId } = req.body;
-//         const { newLocation } = req.body;
-
-//         const cargo = await Cargo.findOne({ cargoId: cargoId });
-//         if (!cargo) return res.status(404).json({ error: 'Cargo not found' });
-
-//         if (newLocation === 'Exit' && cargo.customsStatus !== 'cleared') {
-//           return res.status(400).json({ error: 'Cargo cannot exit without being cleared' });
-//         }    
-
-//         cargo.currentLocation = newLocation;
-//         cargo.movementHistory.push({ location: newLocation });
-//         await cargo.save();
-
-//         // Emit event
-//         req.io.emit('locationUpdated', cargo);
-//         res.json({ message: 'Cargo location updated', cargo });
-//     } catch (err) {
-//         res.status(500).json({ error: 'Error updating cargo location', details: err.message });
-//     }
-// });
-
 const validPath = [
   'Arrived',
   'Point A',
