@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Cargo = require('../models/cargo');
 const Warehouse = require('../models/warehouse');
+const nodemailer = require('nodemailer');
 
 // CARGO TRACKNG SECTION
 
