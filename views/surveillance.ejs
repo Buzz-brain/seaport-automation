@@ -437,19 +437,18 @@ function getAlertMessages(detectedObjects) {
   const alertMessages = [];
   if (detectedObjects.includes('knife') && detectedObjects.includes('person')) {
     alertMessages.push('Potential threat detected: knife and person nearby!');
+    sendEmailAlert(alertMessages.join('\n'));
     playAlertSound(); // Play the beep sound
-
   }
   if (detectedObjects.includes('gun') && detectedObjects.includes('person')) {
     alertMessages.push('Potential threat detected: gun and person nearby!');
     playAlertSound(); // Play the beep sound
-
   }
   if (detectedObjects.includes('gun') && detectedObjects.includes('person')) {
     alertMessages.push('Potential threat detected: gun and person nearby!');
     playAlertSound(); // Play the beep sound
-
   }
+
   // if (detectedObjects.includes('person')) {
   //   alertMessages.push('Alert a person detected');
   // }
@@ -458,6 +457,27 @@ function getAlertMessages(detectedObjects) {
   
   // Add more alert conditions as needed
   return alertMessages;
+}
+
+function sendEmailAlert(message) {
+  fetch('/api/cargo/send-alert', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ message })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      console.log('Email alert sent successfully!');
+    } else {
+      console.error('Email alert failed:', data.msg);
+    }
+  })
+  .catch(err => {
+    console.error('Error sending alert email:', err);
+  });
 }
 
 // Add a function to play the beep sound

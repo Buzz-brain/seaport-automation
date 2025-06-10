@@ -245,6 +245,36 @@ router.delete('/reset-warehouses', async (req, res) => {
     }
 });
 
+router.post('/send-alert', async (req, res) => {
+  const { message } = req.body;
+  console.log("oya oo", message)
+
+  if (!message) return res.status(400).json({ error: 'Message is required' });
+
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail', // or use SMTP
+    auth: {
+      user: 'chinomsochristian03@gmail.com',
+      pass: 'lvju arpk rscp uiai' // use app password if 2FA is on
+    }
+  });
+
+  const mailOptions = {
+    from: 'chinomsochristian03@gmail.com',
+    to: 'chinomsochristian03@gmail.com',
+    subject: 'Object Detection Alert',
+    text: message
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ success: true, msg: 'Email sent' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, msg: 'Email failed to send' });
+  }
+});
+
 module.exports = router;
 
 // {
